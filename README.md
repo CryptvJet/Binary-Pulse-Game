@@ -1,8 +1,23 @@
 # Binary Pulse Game
 
-This repository currently contains only the initial project structure. The
-instructions below outline how a typical development setup might look when the
-source code is added.
+Binary Pulse is a small puzzle/arcade experiment built with vanilla
+JavaScript and rendered on an HTML5 canvas. Players fire pulses across a grid
+to toggle cells between `0` and `1` in an attempt to match target patterns.
+The repository currently contains the initial skeleton and will grow as the
+game evolves.
+
+## Game Overview
+
+The game board consists of a grid of binary cells. Launching a pulse causes it
+to travel in a straight line, flipping the state of each cell it touches.
+Points are awarded for clearing patterns with as few pulses as possible.
+
+## Roadmap
+
+- Implement grid creation and pulse movement logic.
+- Add basic keyboard/mouse controls for launching pulses.
+- Track score and win conditions across multiple levels.
+- Polish visuals with animations and sound effects.
 
 ## Local Development Setup
 
