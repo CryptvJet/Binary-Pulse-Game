@@ -5,17 +5,21 @@ import { renderGame } from './render.js';
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 
+const CELL_SIZE = 20; // desired pixel size per cell
+let GRID_COLS;
+let GRID_ROWS;
+let grid;
+
 function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
+  GRID_COLS = Math.floor(canvas.width / CELL_SIZE);
+  GRID_ROWS = Math.floor(canvas.height / CELL_SIZE);
+  grid = initializeGrid(GRID_ROWS, GRID_COLS);
 }
 
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
-
-const GRID_ROWS = 10;
-const GRID_COLS = 10;
-const grid = initializeGrid(GRID_ROWS, GRID_COLS);
 
 let lastTime = 0;
 
