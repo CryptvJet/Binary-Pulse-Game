@@ -1,17 +1,23 @@
 import { getPulses } from './pulse.js';
 
 export function renderGame(ctx, grid, options = {}) {
-  const { cellSize = 40, pending } = options;
+  const { pending } = options;
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+  const cellWidth = ctx.canvas.width / grid[0].length;
+  const cellHeight = ctx.canvas.height / grid.length;
+  const cellSize = Math.min(cellWidth, cellHeight);
 
   for (let r = 0; r < grid.length; r++) {
     for (let c = 0; c < grid[r].length; c++) {
       const cell = grid[r][c];
+      const x = c * cellWidth;
+      const y = r * cellHeight;
       if (cell.isNull) {
         ctx.fillStyle = '#000';
-        ctx.fillRect(c * cellSize, r * cellSize, cellSize - 1, cellSize - 1);
+        ctx.fillRect(x, y, cellWidth - 1, cellHeight - 1);
         ctx.strokeStyle = '#555';
-        ctx.strokeRect(c * cellSize, r * cellSize, cellSize - 1, cellSize - 1);
+        ctx.strokeRect(x, y, cellWidth - 1, cellHeight - 1);
         continue;
       }
       const intensity = 50 + cell.density * 20;
@@ -20,7 +26,7 @@ export function renderGame(ctx, grid, options = {}) {
       } else {
         ctx.fillStyle = '#222';
       }
-      ctx.fillRect(c * cellSize, r * cellSize, cellSize - 1, cellSize - 1);
+      ctx.fillRect(x, y, cellWidth - 1, cellHeight - 1);
     }
   }
 
@@ -28,8 +34,8 @@ export function renderGame(ctx, grid, options = {}) {
   for (const p of getPulses()) {
     ctx.beginPath();
     ctx.arc(
-      p.x * cellSize + cellSize / 2,
-      p.y * cellSize + cellSize / 2,
+      p.x * cellWidth + cellWidth / 2,
+      p.y * cellHeight + cellHeight / 2,
       cellSize / 4,
       0,
       Math.PI * 2
@@ -40,10 +46,10 @@ export function renderGame(ctx, grid, options = {}) {
   if (pending) {
     ctx.strokeStyle = '#fff';
     ctx.beginPath();
-    const x = pending.x * cellSize + cellSize / 2;
-    const y = pending.y * cellSize + cellSize / 2;
+    const x = pending.x * cellWidth + cellWidth / 2;
+    const y = pending.y * cellHeight + cellHeight / 2;
     ctx.moveTo(x, y);
-    ctx.lineTo(x + pending.dx * cellSize / 2, y + pending.dy * cellSize / 2);
+    ctx.lineTo(x + pending.dx * cellWidth / 2, y + pending.dy * cellHeight / 2);
     ctx.stroke();
   }
 }

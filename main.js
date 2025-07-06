@@ -5,6 +5,14 @@ import { renderGame } from './render.js';
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
 const GRID_ROWS = 10;
 const GRID_COLS = 10;
 const grid = initializeGrid(GRID_ROWS, GRID_COLS);
