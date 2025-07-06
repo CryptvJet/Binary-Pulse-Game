@@ -12,12 +12,27 @@ The game board consists of a grid of binary cells. Launching a pulse causes it
 to travel in a straight line, flipping the state of each cell it touches.
 Points are awarded for clearing patterns with as few pulses as possible.
 
+## New Features
+
+- **Directional Pulse Control** – click a cell and press an arrow key (or WASD)
+  to fire in that direction. If no key is pressed within half a second the
+  pulse launches to the right.
+- **Null Wells** – right-click a cell to create or remove a Null Well. Pulses
+  vanish when touching these voids.
+- **Cell Density** – after selecting a cell, press `0-9` to set its density
+  which slows pulses passing through.
+- **Recursive Pulses** – pulses entering dense clusters spawn additional pulses
+  creating emergent behavior.
+- **Auto Mode** – toggle automatic firing using the `Auto Mode` button.
+- **Debug Panel** – live statistics appear beside the grid showing pulse count,
+  active "1" cells, Null Wells and average density.
+
 ## Roadmap
 
-- Implement grid creation and pulse movement logic.
-- Add basic keyboard/mouse controls for launching pulses.
-- Track score and win conditions across multiple levels.
-- Polish visuals with animations and sound effects.
+- Directional firing and cell density mechanics.
+- Null Wells that absorb pulses.
+- Recursive pulse generation from dense areas.
+- Automatic simulation mode and debug tooling.
 
 ## Local Development Setup
 
