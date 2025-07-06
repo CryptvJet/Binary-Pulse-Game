@@ -8,3 +8,23 @@ canvas {
   margin: 0 auto;
   background: #111;
 }
+
+#container {
+  position: relative;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+#debug {
+  color: #0f0;
+  font-family: monospace;
+  position: absolute;
+  top: 0;
+  left: 820px;
+  width: 200px;
+}
+
+#auto-btn {
+  display: block;
+  margin: 10px auto;
+}
