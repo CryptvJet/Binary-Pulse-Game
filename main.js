@@ -17,6 +17,29 @@ let selectedCell = null;
 let autoInterval = null;
 const debugDiv = document.getElementById('debug');
 const autoBtn = document.getElementById('auto-btn');
+const aboutBtn = document.getElementById('about-btn');
+const directionsBtn = document.getElementById('directions-btn');
+const aboutPanel = document.getElementById('about-panel');
+const directionsPanel = document.getElementById('directions-panel');
+const overlay = document.getElementById('overlay');
+
+function openPanel(panel) {
+  panel.classList.add('open');
+  overlay.style.display = 'block';
+}
+
+function closePanels() {
+  aboutPanel.classList.remove('open');
+  directionsPanel.classList.remove('open');
+  overlay.style.display = 'none';
+}
+
+aboutBtn.addEventListener('click', () => openPanel(aboutPanel));
+directionsBtn.addEventListener('click', () => openPanel(directionsPanel));
+overlay.addEventListener('click', closePanels);
+document.querySelectorAll('.panel .close-btn').forEach(btn =>
+  btn.addEventListener('click', closePanels)
+);
 
 function loop(timestamp) {
   const delta = (timestamp - lastTime) / 1000;
@@ -58,6 +81,12 @@ canvas.addEventListener('contextmenu', (e) => {
 });
 
 window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (aboutPanel.classList.contains('open') || directionsPanel.classList.contains('open')) {
+      closePanels();
+      return;
+    }
+  }
   if (pendingPulse) {
     const dir = getDirectionFromKey(e.key);
     if (dir) {
