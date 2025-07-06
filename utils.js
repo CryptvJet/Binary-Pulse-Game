@@ -1,3 +1,3 @@
 export function clamp(value, min, max) {
-  // TODO: implement clamp helper
+  return Math.max(min, Math.min(max, value));
 }
