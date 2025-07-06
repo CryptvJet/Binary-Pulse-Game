@@ -29,8 +29,10 @@ canvas {
   font-family: monospace;
   position: absolute;
   top: 10px;
-  right: 10px;
+  left: 50%;
+  transform: translateX(-50%);
   width: 200px;
+  text-align: center;
 }
 
 #auto-btn {
@@ -79,7 +81,8 @@ canvas {
 .panel {
   position: fixed;
   top: 0;
-  right: -400px;
+  right: 0;
+  transform: translateX(100%);
   width: 400px;
   height: 100%;
   background: rgba(0, 0, 0, 0.85);
@@ -88,12 +91,12 @@ canvas {
   padding: 20px;
   box-shadow: 0 0 20px #ff00c8;
   border-left: 2px solid #00cfff;
-  transition: right 0.3s ease;
+  transition: transform 0.3s ease;
   z-index: 10;
 }
 
 .panel.open {
-  right: 0;
+  transform: translateX(0);
 }
 
 .panel .close-btn {
