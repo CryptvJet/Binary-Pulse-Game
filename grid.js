@@ -1,9 +1,9 @@
 export function initializeGrid(rows, cols) {
   const grid = [];
-  for (let y = 0; y < rows; y++) {
+  for (let r = 0; r < rows; r++) {
     const row = [];
-    for (let x = 0; x < cols; x++) {
-      row.push(0);
+    for (let c = 0; c < cols; c++) {
+      row.push({ value: 0, density: 0, isNull: false });
     }
     grid.push(row);
   }

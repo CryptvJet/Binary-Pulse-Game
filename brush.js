@@ -1,12 +1,15 @@
-export function applyBrush(grid, x, y, size = 0) {
+export function applyBrush(grid, x, y, size = 0, type = 'toggle') {
   const modified = [];
-  for (let dy = -size; dy <= size; dy++) {
-    for (let dx = -size; dx <= size; dx++) {
-      const ny = y + dy;
-      const nx = x + dx;
-      if (ny >= 0 && ny < grid.length && nx >= 0 && nx < grid[0].length) {
-        grid[ny][nx] = grid[ny][nx] ? 0 : 1;
-        modified.push({ x: nx, y: ny });
+  for (let r = y - size; r <= y + size; r++) {
+    for (let c = x - size; c <= x + size; c++) {
+      if (r >= 0 && r < grid.length && c >= 0 && c < grid[0].length) {
+        const cell = grid[r][c];
+        if (type === 'toggle') {
+          cell.value = cell.value === 0 ? 1 : 0;
+        } else if (type === 'null') {
+          cell.isNull = !cell.isNull;
+        }
+        modified.push({ x: c, y: r });
       }
     }
   }
