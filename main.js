@@ -207,12 +207,10 @@ autoBtn.addEventListener('click', () => {
       const x = Math.floor(Math.random() * GRID_COLS);
       const y = Math.floor(Math.random() * GRID_ROWS);
       const dirs = [
-        { dx: 1, dy: 0, dz: 0 },
-        { dx: -1, dy: 0, dz: 0 },
-        { dx: 0, dy: 1, dz: 0 },
-        { dx: 0, dy: -1, dz: 0 },
-        { dx: 0, dy: 0, dz: 1 },
-        { dx: 0, dy: 0, dz: -1 },
+        { dx: 1, dy: 0 },
+        { dx: -1, dy: 0 },
+        { dx: 0, dy: 1 },
+        { dx: 0, dy: -1 },
       ];
       const d = dirs[Math.floor(Math.random() * dirs.length)];
       launchPulse(x, y, Math.floor(GRID_DEPTH / 2), d.dx, d.dy);
