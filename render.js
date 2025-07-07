@@ -1,7 +1,7 @@
 import { getPulses } from './pulse.js';
 
 export function renderGame(ctx, grid, options = {}) {
-  const { pending } = options;
+  const { pending, modified = [], brushColor = '#00ff00' } = options;
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
   const cellWidth = ctx.canvas.width / grid[0].length;
@@ -27,6 +27,15 @@ export function renderGame(ctx, grid, options = {}) {
         ctx.fillStyle = '#222';
       }
       ctx.fillRect(x, y, cellWidth - 1, cellHeight - 1);
+    }
+  }
+
+  if (modified.length) {
+    ctx.fillStyle = brushColor;
+    for (const m of modified) {
+      const mx = m.x * cellWidth;
+      const my = m.y * cellHeight;
+      ctx.fillRect(mx, my, cellWidth - 1, cellHeight - 1);
     }
   }
 
