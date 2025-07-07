@@ -58,6 +58,10 @@ Open `index.html` directly in your browser or serve the files with a simple stat
 npx http-server .
 ```
 
+**Note:** `index.html` loads the Three.js library from a CDN. You need an
+active internet connection when opening the file unless you download
+`three.module.js` locally and update the script tag accordingly.
+
 ### Running Tests
 
 The repository uses **Jest** for unit testing. After installing the Node
