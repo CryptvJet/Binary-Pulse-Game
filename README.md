@@ -8,31 +8,26 @@ game evolves.
 
 ## Game Overview
 
-The game board consists of a grid of binary cells. Launching a pulse causes it
-to travel in a straight line, flipping the state of each cell it touches.
-Points are awarded for clearing patterns with as few pulses as possible.
+The game board consists of a small 2x2 grid of binary cells. Clicking a cell
+fires a pulse in a random direction, flipping the state of each cell it
+touches. Points are awarded for clearing patterns with as few pulses as
+possible.
 
 ## New Features
 
-- **Directional Pulse Control** – click a cell and press an arrow key (or WASD)
-  to fire in that direction. If no key is pressed within half a second the
-  pulse launches to the right.
-- **Null Wells** – right-click a cell to create or remove a Null Well. Pulses
-  vanish when touching these voids.
+- **Random Pulse Firing** – clicking a cell immediately fires a pulse in a
+  random direction.
 - **Cell Density** – after selecting a cell, press `0-9` to set its density
   which slows pulses passing through.
 - **Recursive Pulses** – pulses entering dense clusters spawn additional pulses
   creating emergent behavior.
-- **Auto Mode** – toggle automatic firing using the `Auto Mode` button.
-- **Rapid Fire** – hold the middle mouse button to continuously fire pulses
-  from the cell under your cursor.
+- **Auto Mode** – repeatedly fires pulses in random directions until paused.
 - **Debug Panel** – live statistics appear beside the grid showing pulse count,
-  active "1" cells, Null Wells and average density.
+  active "1" cells and average density.
 
 ## Roadmap
 
 - Directional firing and cell density mechanics.
-- Null Wells that absorb pulses.
 - Recursive pulse generation from dense areas.
 - Automatic simulation mode and debug tooling.
 
