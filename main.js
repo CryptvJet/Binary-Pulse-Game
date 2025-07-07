@@ -1,38 +1,24 @@
 import { initializeGrid } from './grid.js';
 import { launchPulse, updatePulse, getPulses } from './pulse.js';
-import { renderGame } from './render.js';
+import { initRenderer, renderGame } from './render.js';
 import { applyBrush } from './brush.js';
 
 const canvas = document.getElementById('game-canvas');
-const ctx = canvas.getContext('2d');
 
 let cellSize = 20; // desired pixel size per cell
 let GRID_COLS;
 let GRID_ROWS;
+const GRID_DEPTH = 5;
 let grid;
 
 function resizeCanvas() {
-  const oldGrid = grid;
-  const oldRows = GRID_ROWS;
-  const oldCols = GRID_COLS;
-
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   GRID_COLS = Math.floor(canvas.width / cellSize);
   GRID_ROWS = Math.floor(canvas.height / cellSize);
 
-  const newGrid = initializeGrid(GRID_ROWS, GRID_COLS);
-
-  if (oldGrid) {
-    const rowsToCopy = Math.min(oldRows, GRID_ROWS);
-    const colsToCopy = Math.min(oldCols, GRID_COLS);
-    for (let r = 0; r < rowsToCopy; r++) {
-      for (let c = 0; c < colsToCopy; c++) {
-        newGrid[r][c] = { ...newGrid[r][c], ...oldGrid[r][c] };
-      }
-    }
-  }
-  grid = newGrid;
+  grid = initializeGrid(GRID_DEPTH, GRID_ROWS, GRID_COLS);
+  initRenderer(canvas, grid);
 }
 
 window.addEventListener('resize', resizeCanvas);
@@ -84,13 +70,14 @@ function getCellFromEvent(e) {
   const cellHeight = canvas.height / GRID_ROWS;
   const x = Math.floor((e.clientX - rect.left) / cellWidth);
   const y = Math.floor((e.clientY - rect.top) / cellHeight);
-  return { x, y };
+  const z = Math.floor(GRID_DEPTH / 2);
+  return { x, y, z };
 }
 
 function paintCell(e) {
-  const { x, y } = getCellFromEvent(e);
+  const { x, y, z } = getCellFromEvent(e);
   brushColor = brushColorInput.value;
-  const changed = applyBrush(grid, x, y, 0);
+  const changed = applyBrush(grid, x, y, z, 0);
   modifiedCells.push(...changed);
 }
 
@@ -102,11 +89,14 @@ canvas.addEventListener('mousedown', (e) => {
   if (e.button === 1 && !rapidInterval) {
     rapidCell = getCellFromEvent(e);
     rapidInterval = setInterval(() => {
+      const z = Math.floor(GRID_DEPTH / 2);
       launchPulse(
         rapidCell.x,
         rapidCell.y,
+        z,
         currentDir.dx,
         currentDir.dy,
+        currentDir.dz || 0,
         10,
         0,
         brushColor
@@ -138,11 +128,7 @@ function loop(timestamp) {
   lastTime = timestamp;
 
   updatePulse(delta, grid);
-  renderGame(ctx, grid, {
-    pending: pendingPulse,
-    modified: modifiedCells,
-    brushColor,
-  });
+  renderGame(grid);
   modifiedCells = [];
   updateDebug();
 
@@ -156,12 +142,13 @@ canvas.addEventListener('click', (e) => {
   const cellHeight = canvas.height / GRID_ROWS;
   const x = Math.floor((e.clientX - rect.left) / cellWidth);
   const y = Math.floor((e.clientY - rect.top) / cellHeight);
-  pendingPulse = { x, y, dx: 1, dy: 0 };
-  selectedCell = { x, y };
+  const z = Math.floor(GRID_DEPTH / 2);
+  pendingPulse = { x, y, z, dx: 1, dy: 0, dz: 0 };
+  selectedCell = { x, y, z };
   clearTimeout(pendingTimeout);
   pendingTimeout = setTimeout(() => {
     if (pendingPulse) {
-      launchPulse(x, y, 1, 0, 10, 0, brushColor);
+      launchPulse(x, y, z, 1, 0, 0, 10, 0, brushColor);
       pendingPulse = null;
     }
   }, 500);
@@ -174,7 +161,8 @@ canvas.addEventListener('contextmenu', (e) => {
   const cellHeight = canvas.height / GRID_ROWS;
   const x = Math.floor((e.clientX - rect.left) / cellWidth);
   const y = Math.floor((e.clientY - rect.top) / cellHeight);
-  const cell = grid[y][x];
+  const z = Math.floor(GRID_DEPTH / 2);
+  const cell = grid[z][y][x];
   cell.isNull = !cell.isNull;
 });
 
@@ -192,8 +180,10 @@ window.addEventListener('keydown', (e) => {
       launchPulse(
         pendingPulse.x,
         pendingPulse.y,
+        pendingPulse.z,
         dir.dx,
         dir.dy,
+        dir.dz || 0,
         10,
         0,
         brushColor
@@ -205,7 +195,7 @@ window.addEventListener('keydown', (e) => {
   }
   if (selectedCell) {
     if (e.key >= '0' && e.key <= '9') {
-      grid[selectedCell.y][selectedCell.x].density = parseInt(e.key, 10);
+      grid[selectedCell.z][selectedCell.y][selectedCell.x].density = parseInt(e.key, 10);
     }
   }
 });
@@ -219,14 +209,17 @@ autoBtn.addEventListener('click', () => {
     autoInterval = setInterval(() => {
       const x = Math.floor(Math.random() * GRID_COLS);
       const y = Math.floor(Math.random() * GRID_ROWS);
+      const z = Math.floor(Math.random() * GRID_DEPTH);
       const dirs = [
-        { dx: 1, dy: 0 },
-        { dx: -1, dy: 0 },
-        { dx: 0, dy: 1 },
-        { dx: 0, dy: -1 },
+        { dx: 1, dy: 0, dz: 0 },
+        { dx: -1, dy: 0, dz: 0 },
+        { dx: 0, dy: 1, dz: 0 },
+        { dx: 0, dy: -1, dz: 0 },
+        { dx: 0, dy: 0, dz: 1 },
+        { dx: 0, dy: 0, dz: -1 },
       ];
       const d = dirs[Math.floor(Math.random() * dirs.length)];
-      launchPulse(x, y, d.dx, d.dy);
+      launchPulse(x, y, z, d.dx, d.dy, d.dz);
     }, 250);
     autoBtn.textContent = 'Pause Auto';
   }
@@ -235,11 +228,7 @@ autoBtn.addEventListener('click', () => {
 zoomRange.addEventListener('input', () => {
   cellSize = parseInt(zoomRange.value, 10);
   resizeCanvas();
-  renderGame(ctx, grid, {
-    pending: pendingPulse,
-    modified: modifiedCells,
-    brushColor,
-  });
+  renderGame(grid);
   updateDebug();
 });
 
@@ -261,6 +250,12 @@ function getDirectionFromKey(key) {
     case 'd':
     case 'D':
       return { dx: 1, dy: 0 };
+    case 'q':
+    case 'Q':
+      return { dx: 0, dy: 0, dz: -1 };
+    case 'e':
+    case 'E':
+      return { dx: 0, dy: 0, dz: 1 };
   }
   return null;
 }
@@ -271,14 +266,16 @@ function updateDebug() {
   let ones = 0;
   let nulls = 0;
   let densitySum = 0;
-  for (const row of grid) {
-    for (const cell of row) {
-      if (cell.value === 1) ones++;
-      if (cell.isNull) nulls++;
-      densitySum += cell.density;
+  for (const plane of grid) {
+    for (const row of plane) {
+      for (const cell of row) {
+        if (cell.value === 1) ones++;
+        if (cell.isNull) nulls++;
+        densitySum += cell.density;
+      }
     }
   }
-  const avgDensity = densitySum / (GRID_ROWS * GRID_COLS);
+  const avgDensity = densitySum / (GRID_DEPTH * GRID_ROWS * GRID_COLS);
   debugDiv.textContent =
     `Pulses: ${getPulses().length}\n` +
     `Ones: ${ones}\n` +
