@@ -3,13 +3,14 @@ const pulses = [];
 export function launchPulse(
   x,
   y,
+  z = 0,
   dx,
   dy,
   speed = 10,
   generation = 0,
   color = '#f00'
 ) {
-  pulses.push({ x, y, dx, dy, speed, generation, color });
+  pulses.push({ x, y, z, dx, dy, speed, generation, color });
 }
 
 export function updatePulse(delta, grid) {

@@ -92,6 +92,7 @@ canvas.addEventListener('mousedown', (e) => {
       launchPulse(
         rapidCell.x,
         rapidCell.y,
+        rapidCell.z,
         currentDir.dx,
         currentDir.dy,
         10,
@@ -145,7 +146,7 @@ canvas.addEventListener('click', (e) => {
   clearTimeout(pendingTimeout);
   pendingTimeout = setTimeout(() => {
     if (pendingPulse) {
-      launchPulse(x, y, 1, 0, 10, 0, brushColor);
+      launchPulse(x, y, z, 1, 0, 10, 0, brushColor);
       pendingPulse = null;
     }
   }, 500);
@@ -177,6 +178,7 @@ window.addEventListener('keydown', (e) => {
       launchPulse(
         pendingPulse.x,
         pendingPulse.y,
+        pendingPulse.z,
         dir.dx,
         dir.dy,
         10,
@@ -213,7 +215,7 @@ autoBtn.addEventListener('click', () => {
         { dx: 0, dy: 0, dz: -1 },
       ];
       const d = dirs[Math.floor(Math.random() * dirs.length)];
-      launchPulse(x, y, d.dx, d.dy);
+      launchPulse(x, y, Math.floor(GRID_DEPTH / 2), d.dx, d.dy);
     }, 250);
     autoBtn.textContent = 'Pause Auto';
   }
