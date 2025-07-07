@@ -11,11 +11,26 @@ let GRID_ROWS;
 let grid;
 
 function resizeCanvas() {
+  const oldGrid = grid;
+  const oldRows = GRID_ROWS;
+  const oldCols = GRID_COLS;
+
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   GRID_COLS = Math.floor(canvas.width / CELL_SIZE);
   GRID_ROWS = Math.floor(canvas.height / CELL_SIZE);
+
   grid = initializeGrid(GRID_ROWS, GRID_COLS);
+
+  if (oldGrid) {
+    const rowsToCopy = Math.min(oldRows, GRID_ROWS);
+    const colsToCopy = Math.min(oldCols, GRID_COLS);
+    for (let r = 0; r < rowsToCopy; r++) {
+      for (let c = 0; c < colsToCopy; c++) {
+        grid[r][c] = { ...grid[r][c], ...oldGrid[r][c] };
+      }
+    }
+  }
 }
 
 window.addEventListener('resize', resizeCanvas);
