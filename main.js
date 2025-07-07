@@ -125,7 +125,7 @@ function loop(timestamp) {
   const delta = (timestamp - lastTime) / FRAME_TIME;
   lastTime = timestamp;
 
-  updatePulse(delta, grid);
+  updatePulse(delta, grid[Math.floor(GRID_DEPTH / 2)]);
   renderGame(grid);
   modifiedCells = [];
   updateDebug();
