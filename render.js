@@ -39,8 +39,8 @@ export function renderGame(ctx, grid, options = {}) {
     }
   }
 
-  ctx.fillStyle = '#f00';
   for (const p of getPulses()) {
+    ctx.fillStyle = p.color || '#f00';
     ctx.beginPath();
     ctx.arc(
       p.x * cellWidth + cellWidth / 2,

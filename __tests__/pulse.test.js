@@ -14,4 +14,11 @@ describe('pulse mechanics', () => {
     const pulses = getPulses();
     expect(pulses[0].x).toBeCloseTo(1);
   });
+
+  test('launchPulse stores color', () => {
+    const grid = initializeGrid(1, 1);
+    launchPulse(0, 0, 1, 0, 1, 0, '#123456');
+    const pulses = getPulses();
+    expect(pulses[0].color).toBe('#123456');
+  });
 });

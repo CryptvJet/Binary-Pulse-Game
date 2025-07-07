@@ -1,7 +1,20 @@
 const pulses = [];
 
+codex/reflect-selected-color-on-game-piece
+export function launchPulse(
+  x,
+  y,
+  dx,
+  dy,
+  speed = 10,
+  generation = 0,
+  color = '#f00'
+) {
+  pulses.push({ x, y, dx, dy, speed, generation, color });
+
 export function launchPulse(x, y, dx, dy, speed = 1, generation = 0) {
   pulses.push({ x, y, dx, dy, speed, generation });
+main
 }
 
 export function updatePulse(delta, grid) {
@@ -43,6 +56,7 @@ export function updatePulse(delta, grid) {
           dy: choice.dy,
           speed: p.speed,
           generation: p.generation + 1,
+          color: p.color,
         });
       }
     } else {

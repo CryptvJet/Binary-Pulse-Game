@@ -135,7 +135,7 @@ canvas.addEventListener('click', (e) => {
   clearTimeout(pendingTimeout);
   pendingTimeout = setTimeout(() => {
     if (pendingPulse) {
-      launchPulse(x, y, 1, 0);
+      launchPulse(x, y, 1, 0, 10, 0, brushColor);
       pendingPulse = null;
     }
   }, 500);
@@ -162,7 +162,15 @@ window.addEventListener('keydown', (e) => {
   if (pendingPulse) {
     const dir = getDirectionFromKey(e.key);
     if (dir) {
-      launchPulse(pendingPulse.x, pendingPulse.y, dir.dx, dir.dy);
+      launchPulse(
+        pendingPulse.x,
+        pendingPulse.y,
+        dir.dx,
+        dir.dy,
+        10,
+        0,
+        brushColor
+      );
       pendingPulse = null;
       clearTimeout(pendingTimeout);
       return;
