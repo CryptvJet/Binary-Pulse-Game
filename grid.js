@@ -1,15 +1,11 @@
-export function initializeGrid(depth, rows, cols) {
+export function initializeGrid(rows, cols) {
   const grid = [];
-  for (let z = 0; z < depth; z++) {
-    const plane = [];
-    for (let r = 0; r < rows; r++) {
-      const row = [];
-      for (let c = 0; c < cols; c++) {
-        row.push({ value: 0, density: 0, isNull: false });
-      }
-      plane.push(row);
+  for (let y = 0; y < rows; y++) {
+    const row = [];
+    for (let x = 0; x < cols; x++) {
+      row.push(0);
     }
-    grid.push(plane);
+    grid.push(row);
   }
   return grid;
 }
