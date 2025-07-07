@@ -1,64 +1,79 @@
+import * as THREE from 'three';
 import { getPulses } from './pulse.js';
 
-export function renderGame(ctx, grid, options = {}) {
-  const { pending, modified = [], brushColor = '#00ff00' } = options;
-  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+let renderer;
+let scene;
+let camera;
+let cellMeshes = [];
+let pulseMeshes = [];
 
-  const cellWidth = ctx.canvas.width / grid[0].length;
-  const cellHeight = ctx.canvas.height / grid.length;
-  const cellSize = Math.min(cellWidth, cellHeight);
+export function initRenderer(canvas, grid) {
+  renderer = new THREE.WebGLRenderer({ canvas });
+  renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+  scene = new THREE.Scene();
+  const aspect = canvas.clientWidth / canvas.clientHeight;
+  camera = new THREE.PerspectiveCamera(70, aspect, 0.1, 1000);
+  const depth = grid.length;
+  const rows = grid[0].length;
+  const cols = grid[0][0].length;
+  camera.position.set(cols / 2, -rows * 1.5, depth * 2);
+  camera.lookAt(cols / 2, -rows / 2, depth / 2);
 
-  for (let r = 0; r < grid.length; r++) {
-    for (let c = 0; c < grid[r].length; c++) {
-      const cell = grid[r][c];
-      const x = c * cellWidth;
-      const y = r * cellHeight;
-      if (cell.isNull) {
-        ctx.fillStyle = '#000';
-        ctx.fillRect(x, y, cellWidth - 1, cellHeight - 1);
-        ctx.strokeStyle = '#555';
-        ctx.strokeRect(x, y, cellWidth - 1, cellHeight - 1);
-        continue;
+  const geometry = new THREE.BoxGeometry(1, 1, 1);
+  for (let z = 0; z < depth; z++) {
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
+        const material = new THREE.MeshBasicMaterial({ color: 0x222222 });
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.position.set(x, -y, z);
+        scene.add(mesh);
+        cellMeshes.push(mesh);
       }
-      const intensity = 50 + cell.density * 20;
-      if (cell.value === 1) {
-        ctx.fillStyle = `rgb(0, ${intensity}, 0)`;
-      } else {
-        ctx.fillStyle = '#222';
+    }
+  }
+}
+
+export function renderGame(grid) {
+  if (!renderer) return;
+  const depth = grid.length;
+  const rows = grid[0].length;
+  const cols = grid[0][0].length;
+  let i = 0;
+  for (let z = 0; z < depth; z++) {
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
+        const cell = grid[z][y][x];
+        const mesh = cellMeshes[i++];
+        if (!mesh) continue;
+        if (cell.isNull) {
+          mesh.material.color.set(0x000000);
+        } else if (cell.value === 1) {
+          mesh.material.color.set(0x00ff00);
+        } else {
+          mesh.material.color.set(0x222222);
+        }
       }
-      ctx.fillRect(x, y, cellWidth - 1, cellHeight - 1);
     }
   }
 
-  if (modified.length) {
-    ctx.fillStyle = brushColor;
-    for (const m of modified) {
-      const mx = m.x * cellWidth;
-      const my = m.y * cellHeight;
-      ctx.fillRect(mx, my, cellWidth - 1, cellHeight - 1);
+  const pulses = getPulses();
+  const sphereGeo = new THREE.SphereGeometry(0.3, 8, 8);
+  for (i = 0; i < pulses.length; i++) {
+    const p = pulses[i];
+    let mesh = pulseMeshes[i];
+    if (!mesh) {
+      const mat = new THREE.MeshBasicMaterial({ color: p.color || '#ff0000' });
+      mesh = new THREE.Mesh(sphereGeo, mat);
+      pulseMeshes[i] = mesh;
+      scene.add(mesh);
     }
+    mesh.position.set(p.x, -p.y, p.z);
+    mesh.material.color.set(p.color || '#ff0000');
+  }
+  while (pulseMeshes.length > pulses.length) {
+    const m = pulseMeshes.pop();
+    scene.remove(m);
   }
 
-  for (const p of getPulses()) {
-    ctx.fillStyle = p.color || '#f00';
-    ctx.beginPath();
-    ctx.arc(
-      p.x * cellWidth + cellWidth / 2,
-      p.y * cellHeight + cellHeight / 2,
-      cellSize / 4,
-      0,
-      Math.PI * 2
-    );
-    ctx.fill();
-  }
-
-  if (pending) {
-    ctx.strokeStyle = '#fff';
-    ctx.beginPath();
-    const x = pending.x * cellWidth + cellWidth / 2;
-    const y = pending.y * cellHeight + cellHeight / 2;
-    ctx.moveTo(x, y);
-    ctx.lineTo(x + pending.dx * cellWidth / 2, y + pending.dy * cellHeight / 2);
-    ctx.stroke();
-  }
+  renderer.render(scene, camera);
 }
