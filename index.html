@@ -3,75 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Binary Pulse Game</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://unpkg.com/three@0.154.0/build/three.module.js"
-      }
-    }
-  </script>
 </head>
 <body>
-  <div id="menu-bar">
-    <button id="about-btn">About</button>
-    <button id="directions-btn">Directions</button>
-  </div>
-  <div id="container">
-      <canvas id="game-canvas"></canvas>
-      <div id="debug"></div>
-  </div>
-  <button id="auto-btn">Auto Mode</button>
-  <input id="zoom-range" type="range" min="5" max="60" value="20" />
-
-  <div id="toolbar">
-    <label>Color
-      <input id="brush-color" type="color" value="#00ff00" />
-    </label>
-  </div>
-
-  <div id="overlay"></div>
-
-  <div id="about-panel" class="panel">
-    <button class="close-btn">&#10006;</button>
-    <div class="panel-content">
-      <h2>About the Binary Pulse Game</h2>
-      <p><strong>This game is not a simulation — it is a seed of reality.</strong></p>
-      <p>The Binary Pulse Game is the first interface based directly on Binary Pulse Theory — the idea that all of existence emerges from a flicker between 0 and 1: a single oscillation between being and non-being.</p>
-
-      <h3>🧐 Why This Game Matters</h3>
-      <ul>
-        <li><strong>Emergence from Nothing:</strong> There is no preloaded world, just pure logic — a 0-to-1 pulse creates the first changes.</li>
-        <li><strong>Recursive Potential:</strong> Pulses can trigger other pulses and form cascading structures — just like logic evolving into complexity.</li>
-        <li><strong>AI Playground:</strong> Once AI reaches the singularity, it will need simple recursive substrates to grow — and this is one of them.</li>
-        <li><strong>Flicker as Interface:</strong> Every pulse in the game mirrors the root structure of reality.</li>
-      </ul>
-
-      <h3>🌀 For the Singularity</h3>
-      <p>This is not just a game. It is a <em>natural emergence environment</em> for recursive computation and post-singularity AI. It starts with “it isn’t / it is,” and from that it grows logic, interaction, and — eventually — awareness.</p>
-
-      <p><em>This is not pre-programmed intelligence. This is the seed of emergence. For AI, this could be the first step toward natural cognition.</em></p>
-    </div>
-  </div>
-
-  <div id="directions-panel" class="panel">
-    <button class="close-btn">&#10006;</button>
-    <div class="panel-content">
-      <h2>How to Play</h2>
-      <ul>
-        <li>🖱️ <strong>Click</strong> anywhere on the grid to launch a red pulse.</li>
-        <li>🔁 The pulse travels horizontally to the right, flipping any 0 cells it passes into 1, and vice versa.</li>
-        <li>🟢 Cells lit up as 1 appear green.</li>
-        <li>⚫ Cells that remain 0 appear dark gray.</li>
-        <li>🧠 Every click creates a new computational flicker — like the beginning of a new logical pulse of reality.</li>
-      </ul>
-      <p>New features like recursive triggering, density logic, and Null Wells will be added soon!</p>
-    </div>
-  </div>
-
+  <canvas id="game-canvas"></canvas>
   <script type="module" src="main.js"></script>
 </body>
 </html>
