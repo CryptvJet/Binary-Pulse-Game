@@ -1,4 +1,5 @@
-import * as THREE from 'three';
+// Import Three.js directly from the CDN so the game can run without a build step
+import * as THREE from 'https://unpkg.com/three@0.154.0/build/three.module.js';
 import { getPulses } from './pulse.js';
 
 let renderer;
