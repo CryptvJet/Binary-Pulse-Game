@@ -52,9 +52,7 @@ const directionsBtn = document.getElementById('directions-btn');
 const aboutPanel = document.getElementById('about-panel');
 const directionsPanel = document.getElementById('directions-panel');
 const overlay = document.getElementById('overlay');
-const brushWidthInput = document.getElementById('brush-width');
 const brushColorInput = document.getElementById('brush-color');
-let brushWidth = parseInt(brushWidthInput?.value || '1', 10);
 let brushColor = brushColorInput?.value || '#00ff00';
 let isPainting = false;
 let modifiedCells = [];
@@ -88,9 +86,8 @@ function getCellFromEvent(e) {
 
 function paintCell(e) {
   const { x, y } = getCellFromEvent(e);
-  brushWidth = parseInt(brushWidthInput.value, 10);
   brushColor = brushColorInput.value;
-  const changed = applyBrush(grid, x, y, brushWidth);
+  const changed = applyBrush(grid, x, y, 0);
   modifiedCells.push(...changed);
 }
 
