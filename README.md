@@ -67,6 +67,17 @@ npm start              # if using a Node server
 python main.py         # if the application entry point is Python
 ```
 
+### Running Tests
+
+The repository uses **Jest** for unit testing. After installing the Node
+dependencies, run:
+
+```bash
+npm test
+```
+
+This executes all tests in the `__tests__` directory.
+
 ## Troubleshooting
 
 - **Version Mismatch**
