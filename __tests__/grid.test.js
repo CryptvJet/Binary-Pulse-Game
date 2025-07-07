@@ -6,7 +6,7 @@ test('initializeGrid creates correct dimensions', () => {
   expect(grid[0].length).toBe(3);
 });
 
-test('cells start with zero', () => {
+test('cells start with default values', () => {
   const grid = initializeGrid(1, 1);
-  expect(grid[0][0]).toBe(0);
+  expect(grid[0][0]).toEqual({ value: 0, density: 0, isNull: false });
 });
