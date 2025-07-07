@@ -38,10 +38,9 @@ Points are awarded for clearing patterns with as few pulses as possible.
 
 ## Local Development Setup
 
-The project uses both Node.js and Python. Install recent versions of each:
+The project uses Node.js for testing and optional local servers. Install a recent version:
 
 - **Node.js**: version 18 or later
-- **Python**: version 3.10 or later
 
 ### Installation
 
@@ -50,23 +49,13 @@ The project uses both Node.js and Python. Install recent versions of each:
    ```bash
    npm install
    ```
-3. Create a Python virtual environment and install dependencies:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   pip install -r requirements.txt
-   ```
 
 ### Running the Project
 
-Once dependencies are installed you can run the development server. Depending on
-how the code is structured this might involve a Node script or a Python entry
-point. Typical commands would be:
+Open `index.html` directly in your browser or serve the files with a simple static server:
 
 ```bash
-npm start              # if using a Node server
-# or
-python main.py         # if the application entry point is Python
+npx http-server .
 ```
 
 ### Running Tests
@@ -83,13 +72,10 @@ This executes all tests in the `__tests__` directory.
 ## Troubleshooting
 
 - **Version Mismatch**
-  - Verify the Node.js and Python versions match the requirements above.
+  - Verify the Node.js version matches the requirement above.
 - **Missing Dependencies**
-  - Ensure `npm install` and `pip install -r requirements.txt` have been run.
-- **Virtual Environment Not Activated**
-  - Activate your Python virtual environment before starting the project.
+  - Ensure `npm install` has been run.
 - **Port Already in Use**
-  - If the development server fails to start because the default port is busy,
-    set an alternative port using an environment variable or configuration
-    option.
+  - If the static server fails to start because the default port is busy,
+    set an alternative port using an environment variable or configuration option.
 
