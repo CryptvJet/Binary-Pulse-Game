@@ -21,4 +21,15 @@ describe('pulse mechanics', () => {
     const pulses = getPulses();
     expect(pulses[0].color).toBe('#123456');
   });
+
+  test('rapid fire launches multiple pulses', () => {
+    const grid = initializeGrid(1, 1);
+    for (let i = 0; i < 5; i++) {
+      launchPulse(0, 0, 1, 0, 1);
+    }
+    const pulses = getPulses();
+    expect(pulses.length).toBe(5);
+    updatePulse(1, grid);
+    expect(pulses[0].x).toBeCloseTo(1);
+  });
 });
