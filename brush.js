@@ -1,4 +1,5 @@
 export function applyBrush(grid, x, y, size = 0, type = 'toggle') {
+  const modified = [];
   for (let r = y - size; r <= y + size; r++) {
     for (let c = x - size; c <= x + size; c++) {
       if (r >= 0 && r < grid.length && c >= 0 && c < grid[0].length) {
@@ -8,7 +9,9 @@ export function applyBrush(grid, x, y, size = 0, type = 'toggle') {
         } else if (type === 'null') {
           cell.isNull = !cell.isNull;
         }
+        modified.push({ x: c, y: r });
       }
     }
   }
+  return modified;
 }

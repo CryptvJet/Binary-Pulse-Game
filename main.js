@@ -1,6 +1,7 @@
 import { initializeGrid } from './grid.js';
 import { launchPulse, updatePulse, getPulses } from './pulse.js';
 import { renderGame } from './render.js';
+import { applyBrush } from './brush.js';
 
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
@@ -51,6 +52,12 @@ const directionsBtn = document.getElementById('directions-btn');
 const aboutPanel = document.getElementById('about-panel');
 const directionsPanel = document.getElementById('directions-panel');
 const overlay = document.getElementById('overlay');
+const brushWidthInput = document.getElementById('brush-width');
+const brushColorInput = document.getElementById('brush-color');
+let brushWidth = parseInt(brushWidthInput?.value || '1', 10);
+let brushColor = brushColorInput?.value || '#00ff00';
+let isPainting = false;
+let modifiedCells = [];
 
 function openPanel(panel) {
   panel.classList.add('open');
@@ -70,18 +77,56 @@ document.querySelectorAll('.panel .close-btn').forEach(btn =>
   btn.addEventListener('click', closePanels)
 );
 
+function getCellFromEvent(e) {
+  const rect = canvas.getBoundingClientRect();
+  const cellWidth = canvas.width / GRID_COLS;
+  const cellHeight = canvas.height / GRID_ROWS;
+  const x = Math.floor((e.clientX - rect.left) / cellWidth);
+  const y = Math.floor((e.clientY - rect.top) / cellHeight);
+  return { x, y };
+}
+
+function paintCell(e) {
+  const { x, y } = getCellFromEvent(e);
+  brushWidth = parseInt(brushWidthInput.value, 10);
+  brushColor = brushColorInput.value;
+  const changed = applyBrush(grid, x, y, brushWidth);
+  modifiedCells.push(...changed);
+}
+
+canvas.addEventListener('mousedown', (e) => {
+  if (e.button !== 0) return;
+  isPainting = true;
+  paintCell(e);
+});
+
+canvas.addEventListener('mousemove', (e) => {
+  if (!isPainting) return;
+  paintCell(e);
+});
+
+window.addEventListener('mouseup', () => {
+  isPainting = false;
+});
+
 function loop(timestamp) {
   const delta = (timestamp - lastTime) / 1000;
   lastTime = timestamp;
 
   updatePulse(delta, grid);
-  renderGame(ctx, grid, { pending: pendingPulse });
+  renderGame(ctx, grid, {
+    pending: pendingPulse,
+    modified: modifiedCells,
+    brushColor,
+  });
+  modifiedCells = [];
   updateDebug();
 
   requestAnimationFrame(loop);
 }
 
 canvas.addEventListener('click', (e) => {
+  if (isPainting) return;
   const rect = canvas.getBoundingClientRect();
   const cellWidth = canvas.width / GRID_COLS;
   const cellHeight = canvas.height / GRID_ROWS;
@@ -157,7 +202,11 @@ autoBtn.addEventListener('click', () => {
 zoomRange.addEventListener('input', () => {
   cellSize = parseInt(zoomRange.value, 10);
   resizeCanvas();
-  renderGame(ctx, grid, { pending: pendingPulse });
+  renderGame(ctx, grid, {
+    pending: pendingPulse,
+    modified: modifiedCells,
+    brushColor,
+  });
   updateDebug();
 });
 
