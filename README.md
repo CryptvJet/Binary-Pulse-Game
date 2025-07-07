@@ -24,6 +24,8 @@ Points are awarded for clearing patterns with as few pulses as possible.
 - **Recursive Pulses** – pulses entering dense clusters spawn additional pulses
   creating emergent behavior.
 - **Auto Mode** – toggle automatic firing using the `Auto Mode` button.
+- **Rapid Fire** – hold the middle mouse button to continuously fire pulses
+  from the cell under your cursor.
 - **Debug Panel** – live statistics appear beside the grid showing pulse count,
   active "1" cells, Null Wells and average density.
 

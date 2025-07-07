@@ -56,6 +56,9 @@ const brushColorInput = document.getElementById('brush-color');
 let brushColor = brushColorInput?.value || '#00ff00';
 let isPainting = false;
 let modifiedCells = [];
+let rapidInterval = null;
+let rapidCell = null;
+let currentDir = { dx: 1, dy: 0 };
 
 function openPanel(panel) {
   panel.classList.add('open');
@@ -92,18 +95,41 @@ function paintCell(e) {
 }
 
 canvas.addEventListener('mousedown', (e) => {
-  if (e.button !== 0) return;
-  isPainting = true;
-  paintCell(e);
+  if (e.button === 0) {
+    isPainting = true;
+    paintCell(e);
+  }
+  if (e.button === 1 && !rapidInterval) {
+    rapidCell = getCellFromEvent(e);
+    rapidInterval = setInterval(() => {
+      launchPulse(
+        rapidCell.x,
+        rapidCell.y,
+        currentDir.dx,
+        currentDir.dy,
+        10,
+        0,
+        brushColor
+      );
+    }, 100);
+  }
 });
 
 canvas.addEventListener('mousemove', (e) => {
-  if (!isPainting) return;
-  paintCell(e);
+  if (isPainting) {
+    paintCell(e);
+  }
+  if (rapidInterval) {
+    rapidCell = getCellFromEvent(e);
+  }
 });
 
 window.addEventListener('mouseup', () => {
   isPainting = false;
+  if (rapidInterval) {
+    clearInterval(rapidInterval);
+    rapidInterval = null;
+  }
 });
 
 function loop(timestamp) {
@@ -162,6 +188,7 @@ window.addEventListener('keydown', (e) => {
   if (pendingPulse) {
     const dir = getDirectionFromKey(e.key);
     if (dir) {
+      currentDir = dir;
       launchPulse(
         pendingPulse.x,
         pendingPulse.y,
