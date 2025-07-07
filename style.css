@@ -49,6 +49,13 @@ canvas {
   box-shadow: 0 0 10px rgba(0, 207, 255, 0.5);
 }
 
+#zoom-range {
+  position: fixed;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 /* menu bar */
 #menu-bar {
   position: fixed;

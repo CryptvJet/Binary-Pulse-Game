@@ -5,7 +5,7 @@ import { renderGame } from './render.js';
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 
-const CELL_SIZE = 20; // desired pixel size per cell
+let cellSize = 20; // desired pixel size per cell
 let GRID_COLS;
 let GRID_ROWS;
 let grid;
@@ -17,20 +17,21 @@ function resizeCanvas() {
 
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  GRID_COLS = Math.floor(canvas.width / CELL_SIZE);
-  GRID_ROWS = Math.floor(canvas.height / CELL_SIZE);
+  GRID_COLS = Math.floor(canvas.width / cellSize);
+  GRID_ROWS = Math.floor(canvas.height / cellSize);
 
-  grid = initializeGrid(GRID_ROWS, GRID_COLS);
+  const newGrid = initializeGrid(GRID_ROWS, GRID_COLS);
 
   if (oldGrid) {
     const rowsToCopy = Math.min(oldRows, GRID_ROWS);
     const colsToCopy = Math.min(oldCols, GRID_COLS);
     for (let r = 0; r < rowsToCopy; r++) {
       for (let c = 0; c < colsToCopy; c++) {
-        grid[r][c] = { ...grid[r][c], ...oldGrid[r][c] };
+        newGrid[r][c] = { ...newGrid[r][c], ...oldGrid[r][c] };
       }
     }
   }
+  grid = newGrid;
 }
 
 window.addEventListener('resize', resizeCanvas);
@@ -44,6 +45,7 @@ let selectedCell = null;
 let autoInterval = null;
 const debugDiv = document.getElementById('debug');
 const autoBtn = document.getElementById('auto-btn');
+const zoomRange = document.getElementById('zoom-range');
 const aboutBtn = document.getElementById('about-btn');
 const directionsBtn = document.getElementById('directions-btn');
 const aboutPanel = document.getElementById('about-panel');
@@ -150,6 +152,13 @@ autoBtn.addEventListener('click', () => {
     }, 250);
     autoBtn.textContent = 'Pause Auto';
   }
+});
+
+zoomRange.addEventListener('input', () => {
+  cellSize = parseInt(zoomRange.value, 10);
+  resizeCanvas();
+  renderGame(ctx, grid, { pending: pendingPulse });
+  updateDebug();
 });
 
 function getDirectionFromKey(key) {
