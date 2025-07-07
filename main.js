@@ -89,14 +89,11 @@ canvas.addEventListener('mousedown', (e) => {
   if (e.button === 1 && !rapidInterval) {
     rapidCell = getCellFromEvent(e);
     rapidInterval = setInterval(() => {
-      const z = Math.floor(GRID_DEPTH / 2);
       launchPulse(
         rapidCell.x,
         rapidCell.y,
-        z,
         currentDir.dx,
         currentDir.dy,
-        currentDir.dz || 0,
         10,
         0,
         brushColor
@@ -148,7 +145,7 @@ canvas.addEventListener('click', (e) => {
   clearTimeout(pendingTimeout);
   pendingTimeout = setTimeout(() => {
     if (pendingPulse) {
-      launchPulse(x, y, z, 1, 0, 0, 10, 0, brushColor);
+      launchPulse(x, y, 1, 0, 10, 0, brushColor);
       pendingPulse = null;
     }
   }, 500);
@@ -180,10 +177,8 @@ window.addEventListener('keydown', (e) => {
       launchPulse(
         pendingPulse.x,
         pendingPulse.y,
-        pendingPulse.z,
         dir.dx,
         dir.dy,
-        dir.dz || 0,
         10,
         0,
         brushColor
@@ -209,7 +204,6 @@ autoBtn.addEventListener('click', () => {
     autoInterval = setInterval(() => {
       const x = Math.floor(Math.random() * GRID_COLS);
       const y = Math.floor(Math.random() * GRID_ROWS);
-      const z = Math.floor(Math.random() * GRID_DEPTH);
       const dirs = [
         { dx: 1, dy: 0, dz: 0 },
         { dx: -1, dy: 0, dz: 0 },
@@ -219,7 +213,7 @@ autoBtn.addEventListener('click', () => {
         { dx: 0, dy: 0, dz: -1 },
       ];
       const d = dirs[Math.floor(Math.random() * dirs.length)];
-      launchPulse(x, y, z, d.dx, d.dy, d.dz);
+      launchPulse(x, y, d.dx, d.dy);
     }, 250);
     autoBtn.textContent = 'Pause Auto';
   }
