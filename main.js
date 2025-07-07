@@ -107,7 +107,8 @@ window.addEventListener('mouseup', () => {
 });
 
 function loop(timestamp) {
-  const delta = (timestamp - lastTime) / 1000;
+  const FRAME_TIME = 1000 / 60;
+  const delta = (timestamp - lastTime) / FRAME_TIME;
   lastTime = timestamp;
 
   updatePulse(delta, grid);

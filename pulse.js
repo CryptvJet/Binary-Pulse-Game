@@ -1,6 +1,6 @@
 const pulses = [];
 
-export function launchPulse(x, y, dx, dy, speed = 10, generation = 0) {
+export function launchPulse(x, y, dx, dy, speed = 1, generation = 0) {
   pulses.push({ x, y, dx, dy, speed, generation });
 }
 
